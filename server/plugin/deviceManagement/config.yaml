@@ -1,0 +1,17 @@
+mongo:
+  path: 172.16.4.226:27017
+  db-name: mesh
+  username: dbadmin
+  password: 12345678
+rabbit:
+  path: 172.16.4.226:5672
+  username: admin
+  password: admin
+mqtt:
+  path: 172.16.4.144:1883
+  clientid: meshbackend
+  username: meshbackend
+  password: 12345678
+  qos: 0
+  keepalive: 10
+  timeout: 10s

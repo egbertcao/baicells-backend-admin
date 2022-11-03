@@ -2,8 +2,10 @@ package initialize
 
 import (
 	"fmt"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/deviceManagement"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/email"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/plugin"
 	"github.com/gin-gonic/gin"
@@ -19,6 +21,8 @@ func PluginInit(group *gin.RouterGroup, Plugin ...plugin.Plugin) {
 func InstallPlugin(Router *gin.Engine) {
 	PublicGroup := Router.Group("")
 	fmt.Println("无鉴权插件安装==》", PublicGroup)
+	PluginInit(PublicGroup, deviceManagement.CreatedeviceManagement())
+
 	PrivateGroup := Router.Group("")
 	fmt.Println("鉴权插件安装==》", PrivateGroup)
 	PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
