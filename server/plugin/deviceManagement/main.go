@@ -4,6 +4,7 @@ package deviceManagement
 import (
 	"fmt"
 
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/deviceManagement/backend"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/deviceManagement/config"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/deviceManagement/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/deviceManagement/router"
@@ -19,20 +20,22 @@ type deviceManagementPlugin struct{}
 
 func CreatedeviceManagement() *deviceManagementPlugin {
 	sysconfig := parameterInit()
-	rabbitConnection := rabbitmq.RabbitNew(&sysconfig.Rabbit, "basic_queue")
-	global.RabbitProducer = rabbitmq.ProducerNew(rabbitConnection)
-	consumer := rabbitmq.ConsumerNew(rabbitConnection)
-	go consumer.Stream()
+
+	//global.RabbitClient = rabbitmq.RabbitClientNew(&sysconfig.Rabbit, "basic_queue")
+	rabbitmq.RabbitServerNew(&sysconfig.Rabbit, "basic_queue", backend.RabbitConsumerReceive)
+	rabbitmq.RabbitRpcInit()
 
 	global.MongoSession = mongorapper.MongoNew(sysconfig)
-	go mqttrapper.MqttNew(sysconfig)
-
+	go mqttrapper.MqttNew(sysconfig, backend.MqttReceiver)
 	return &deviceManagementPlugin{}
 }
 
 func (*deviceManagementPlugin) Register(group *gin.RouterGroup) {
 	router.RouterGroupApp.InitDeviceRouter(group)
 	router.RouterGroupApp.InitSecurityRouter(group)
+	router.RouterGroupApp.InitTemplateRouter(group)
+	router.RouterGroupApp.InitinstanceRouter(group)
+	global.Group = group
 }
 
 func (*deviceManagementPlugin) RouterPath() string {

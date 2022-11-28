@@ -3,11 +3,14 @@ package service
 import (
 	"encoding/json"
 
+	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/deviceManagement/config"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/deviceManagement/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/deviceManagement/model"
 	deviceReq "github.com/flipped-aurora/gin-vue-admin/server/plugin/deviceManagement/model/request"
+	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -21,6 +24,10 @@ var authentication AuthenticationSerivice
 //@description: 创建客户
 //@param: e model.Device
 //@return: err error
+func (exa *DeviceService) Test(c *gin.Context) {
+	println("123test")
+	response.OkWithMessage("创建成功", c)
+}
 
 func (exa *DeviceService) CreateDevice(e model.Device) (err error) {
 	objectid := primitive.NewObjectID()
@@ -42,6 +49,10 @@ func (exa *DeviceService) CreateDevice(e model.Device) (err error) {
 		Super:    false,
 	}
 	authentication.CreateAuthentication(param)
+
+	instanceRouter := global.Group.Group("TEST").Use(middleware.OperationRecord())
+	instanceRouter.POST("TESTrouter", exa.Test)
+
 	return
 }
 

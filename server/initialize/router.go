@@ -8,7 +8,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
 	"github.com/flipped-aurora/gin-vue-admin/server/router"
 	"github.com/gin-gonic/gin"
-	"github.com/swaggo/gin-swagger"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
@@ -45,8 +45,9 @@ func Routers() *gin.Engine {
 		})
 	}
 	{
-		systemRouter.InitBaseRouter(PublicGroup) // 注册基础功能路由 不做鉴权
-		systemRouter.InitInitRouter(PublicGroup) // 自动初始化相关
+		systemRouter.InitBaseRouter(PublicGroup)    // 注册基础功能路由 不做鉴权
+		systemRouter.InitInitRouter(PublicGroup)    // 自动初始化相关
+		systemRouter.InitAppUserRouter(PublicGroup) // 注册APP用户路由
 	}
 	PrivateGroup := Router.Group("")
 	PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())

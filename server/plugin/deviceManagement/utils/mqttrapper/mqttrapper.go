@@ -12,7 +12,6 @@ import (
 	"github.com/eclipse/paho.golang/autopaho"
 	"github.com/eclipse/paho.golang/paho"
 	mainGlobal "github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/plugin/deviceManagement/backend"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/deviceManagement/config"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/deviceManagement/global"
 	"go.uber.org/zap"
@@ -49,7 +48,7 @@ func on_server_disconnect(d *paho.Disconnect) {
 	}
 }
 
-func MqttNew(param *config.Config) {
+func MqttNew(param *config.Config, onMessage func(m *paho.Publish)) {
 	mqtturl, _ := url.Parse(config.MqttDns(&param.Mqtt))
 	cliCfg := autopaho.ClientConfig{
 		BrokerUrls:        []*url.URL{mqtturl},
@@ -59,7 +58,7 @@ func MqttNew(param *config.Config) {
 		OnConnectError:    on_connect_failed,
 		ClientConfig: paho.ClientConfig{
 			ClientID:           param.Mqtt.ClientID,
-			Router:             paho.NewSingleHandlerRouter(backend.MessageReceiver),
+			Router:             paho.NewSingleHandlerRouter(onMessage),
 			OnClientError:      on_client_err,
 			OnServerDisconnect: on_server_disconnect,
 		},

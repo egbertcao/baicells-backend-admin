@@ -49,7 +49,7 @@
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item prop="captcha">
+          <!-- <el-form-item prop="captcha">
             <div class="vPicBox">
               <el-input
                 v-model="loginFormData.captcha"
@@ -65,7 +65,7 @@
                 >
               </div>
             </div>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item>
             <el-button
               type="primary"
@@ -142,16 +142,16 @@ const checkPassword = (rule, value, callback) => {
 
 // 获取验证码
 const loginVerify = () => {
-  captcha({}).then(async(ele) => {
-    rules.captcha.push({
-      max: ele.data.captchaLength,
-      min: ele.data.captchaLength,
-      message: `请输入${ele.data.captchaLength}位验证码`,
-      trigger: 'blur',
-    })
-    picPath.value = ele.data.picPath
-    loginFormData.captchaId = ele.data.captchaId
-  })
+  // captcha({}).then(async(ele) => {
+  //   rules.captcha.push({
+  //     max: ele.data.captchaLength,
+  //     min: ele.data.captchaLength,
+  //     message: `请输入${ele.data.captchaLength}位验证码`,
+  //     trigger: 'blur',
+  //   })
+  //   picPath.value = ele.data.picPath
+  //   loginFormData.captchaId = ele.data.captchaId
+  // })
 }
 loginVerify()
 
@@ -197,7 +197,7 @@ const submitForm = () => {
         message: '请正确填写登录信息',
         showClose: true,
       })
-      loginVerify()
+      //loginVerify()
       return false
     }
   })

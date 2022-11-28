@@ -20,6 +20,7 @@ func CreateEmailPlug(To, From, Host, Secret, Nickname string, Port int, IsSSL bo
 }
 
 func (*emailPlugin) Register(group *gin.RouterGroup) {
+	global.Group = group
 	router.RouterGroupApp.InitEmailRouter(group)
 }
 

@@ -23,7 +23,17 @@ func (s *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 		userRouter.POST("resetPassword", baseApi.ResetPassword)           // 设置用户权限组
 	}
 	{
-		userRouterWithoutRecord.POST("getUserList", baseApi.GetUserList) // 分页获取用户列表
-		userRouterWithoutRecord.GET("getUserInfo", baseApi.GetUserInfo)  // 获取自身信息
+		userRouterWithoutRecord.POST("app_register", baseApi.App_Register) // APP注册账号
+		userRouterWithoutRecord.POST("getUserList", baseApi.GetUserList)   // 分页获取用户列表
+		userRouterWithoutRecord.GET("getUserInfo", baseApi.GetUserInfo)    // 获取自身信息
 	}
+}
+
+func (s *UserRouter) InitAppUserRouter(Router *gin.RouterGroup) {
+	userRouter := Router.Group("app_user")
+	baseApi := v1.ApiGroupApp.SystemApiGroup.BaseApi
+	{
+		userRouter.POST("app_register", baseApi.App_Register) // APP注册账号
+	}
+
 }
